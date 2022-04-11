@@ -1,3 +1,34 @@
+import sqlite3
+
+conn = sqlite3.connect("pets.db")
+mouse = conn.cursor()
+
+def print_info(person_id, mouse):
+    try:
+        info = mouse.execute(f"SELECT * FROM person WHERE id = {person_id}")
+        info_list = list(info)
+        print(f"{info_list[0][1]} {info_list[0][2]}, age is {info_list[0][3]}")
+        pet_id_info = mouse.execute(f"SELECT * FROM person_pet WHERE person_id = {person_id}")
+        pet_id_list = list(pet_id_info)
+
+        for pet in range(len(pet_id_list)):
+            pet_info = mouse.execute(f"SELECT * FROM pet WHERE id = {pet_id_list[pet][1]}")
+            pet_list = list(pet_info)
+            if(pet_list!=[]):
+                if(pet_list[0][4]==0):
+                    print(f"{info_list[0][1]} {info_list[0][1]} owns {pet_list[0][1]}, a {pet_list[0][2]}, age of {pet_list[0][3]}.")
+                else:
+                    print(f"{info_list[0][1]} {info_list[0][1]} owned {pet_list[0][1]}, a {pet_list[0][2]}, age of {pet_list[0][3]}.")
+    
+    except:
+        print("Error. Value does not exist.")
 
 if __name__ == "__main__":
-    pass
+    person_id = input("Please enter person id: ")
+    if person_id == "a-1":
+        person_id = int(person_id)
+        print_info(person_id,mouse)
+    else:
+        exit()
+
+
